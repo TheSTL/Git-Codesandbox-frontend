@@ -1,12 +1,14 @@
 import Header from "./components/Header";
-import DeployConfig from "./components/DeployConfig";
+
+import TabContent from "./components/TabContent";
+import { GithubDataContextProvider } from "./context";
 
 function App() {
   return (
-    <>
+    <GithubDataContextProvider>
       <Header />
-      <DeployConfig />
-    </>
+      <TabContent />
+    </GithubDataContextProvider>
   );
 }
 

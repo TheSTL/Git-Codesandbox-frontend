@@ -1,7 +1,7 @@
-import style from "./index.module.css";
+import style from "./index.module.scss";
 
 function Header() {
-  return <header className={style.header}>Git commit history</header>;
+  return <header className={style.header}>Git Codesandbox</header>;
 }
 
 export default Header;

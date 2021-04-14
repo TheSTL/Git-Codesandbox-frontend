@@ -9,6 +9,7 @@
     outline: none;
     cursor: pointer;
     line-height: 2;
+    border: 1px solid transparent;
 }
 
 .button-blue {
@@ -20,6 +21,7 @@
     }
 
     &:active {
-        box-shadow: 0px 0px 3px 1px #0f6bdd;
+        box-shadow: 0px 0px 2px 1px #0f6bdd;
+        border: 1px solid #0f6bdd;
     }
 }

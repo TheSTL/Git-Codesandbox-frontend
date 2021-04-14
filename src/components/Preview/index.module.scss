@@ -1,0 +1,17 @@
+.iframe {
+    width: 60%;
+    height: 500px;
+}
+
+.loading {
+    composes: iframe;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid white;
+}
+
+.hiddenIframe {
+    composes: iframe;
+    opacity: 0;
+}
