@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "../Button";
 import Input from "../Input";
 import Label from "../Label";
 import style from "./index.module.scss";
@@ -24,6 +25,7 @@ function DeployConfig() {
         value={commitId}
         onChange={setcommitId}
       />
+      <Button text="Deploy" />
     </div>
   );
 }
