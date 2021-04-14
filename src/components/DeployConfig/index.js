@@ -1,7 +1,8 @@
-import { useContext, useCallback } from "react";
+import { useContext, useCallback, useEffect } from "react";
 import Button from "../Button";
 import Input from "../Input";
 import Label from "../Label";
+import SearchInput from "../SearchInput";
 import { GithubDataContext } from "../../context";
 import { cloneUrl, importToSandbox } from "../../constants/url";
 import style from "./index.module.scss";
@@ -10,14 +11,16 @@ function DeployConfig() {
   const { githubData, setGithubData } = useContext(GithubDataContext);
   const onChange = useCallback(
     (e) => {
+      const name = e.target.name;
+      const value = e.target.value;
       setGithubData((prevState) => ({
         ...prevState,
-        [e.target.name]: e.target.value,
+        [name]: value,
       }));
     },
     [setGithubData]
   );
-  const onClickDeploy = async () => {
+  const onClickDeploy = useCallback(async () => {
     setGithubData((prevState) => ({
       ...prevState,
       isLoading: true,
@@ -48,7 +51,24 @@ function DeployConfig() {
           isLoading: false,
         }));
       });
-  };
+  }, [setGithubData, githubData.url, githubData.branch, githubData.commitId]);
+
+  useEffect(() => {
+    const repoLoc = githubData.url.split("https://github.com/");
+    if (repoLoc[1]) {
+      fetch(`https://api.github.com/repos/${repoLoc[1]}/branches`)
+        .then((response) => {
+          if (!response.ok) return;
+          return response.json();
+        })
+        .then((data) => {
+          setGithubData((prevState) => ({
+            ...prevState,
+            branchList: data.map((branchData) => branchData.name),
+          }));
+        });
+    }
+  }, [githubData.url, setGithubData]);
 
   return (
     <div className={style.deployConfig}>
@@ -60,11 +80,13 @@ function DeployConfig() {
         onChange={onChange}
       />
       <Label text="Github Repository Branch Name" />
-      <Input
+
+      <SearchInput
         name="branch"
         placeholder="Insert Branch Name"
         value={githubData.branch}
         onChange={onChange}
+        list={githubData.branchList}
       />
       <Label text="GitHub Repository Commit Id" />
       <Input

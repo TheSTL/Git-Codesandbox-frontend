@@ -9,6 +9,7 @@ export const GithubDataContextProvider = (props) => {
     url: "https://github.com/TheSTL/ShowGithubProfile",
     embedUrl: "https://codesandbox.io/embed/79wri",
     isLoading: false,
+    branchList: [],
   });
   return (
     <GithubDataContext.Provider value={{ githubData, setGithubData }}>
