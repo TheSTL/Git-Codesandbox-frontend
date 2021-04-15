@@ -1,16 +1,16 @@
-import { useContext, useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Button from "../Button";
 import Input from "../Input";
 import Label from "../Label";
 import SearchInput from "../SearchInput";
-import { GithubDataContext } from "../../context";
+import { useGithubDataContext } from "../../context";
 import { cloneUrl, importToSandbox } from "../../constants/url";
 import { getRepoLoc } from "../../utils";
 import style from "./index.module.scss";
 
 function DeployConfig() {
   const [errorMessage, setErrorMessage] = useState("");
-  const { githubData, setGithubData } = useContext(GithubDataContext);
+  const { githubData, setGithubData } = useGithubDataContext();
   const onChange = useCallback(
     (e) => {
       const name = e.target.name;
