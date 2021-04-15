@@ -3,10 +3,10 @@ import Preview from "../Preview";
 
 import style from "./index.module.scss";
 
-function TabContent() {
+function TabContent({ id, setTabs }) {
   return (
     <div className={style.tabContent}>
-      <DeployConfig />
+      <DeployConfig id={id} setTabs={setTabs} />
       <Preview />
     </div>
   );

@@ -8,7 +8,7 @@ import { cloneUrl, importToSandbox } from "../../constants/url";
 import { getRepoLoc } from "../../utils";
 import style from "./index.module.scss";
 
-function DeployConfig() {
+function DeployConfig({ id, setTabs }) {
   const [errorMessage, setErrorMessage] = useState("");
   const { githubData, setGithubData } = useGithubDataContext();
   const onChange = useCallback(
@@ -58,7 +58,12 @@ function DeployConfig() {
   useEffect(() => {
     setErrorMessage("");
     const repoLoc = getRepoLoc(githubData.url);
-
+    setTabs((prev) =>
+      prev.map((tab) => {
+        if (tab.id === id) return { ...tab, name: repoLoc.split("/")[1] };
+        return tab;
+      })
+    );
     if (false && repoLoc) {
       fetch(`https://api.github.com/repos/${repoLoc}/branches`)
         .then((response) => {
@@ -85,7 +90,7 @@ function DeployConfig() {
         })
         .catch((err) => setErrorMessage(err.message));
     }
-  }, [githubData.url, setGithubData]);
+  }, [githubData.url, setGithubData, setTabs, id]);
 
   useEffect(() => {
     const repoLoc = getRepoLoc(githubData.url);

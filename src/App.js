@@ -1,12 +1,12 @@
 import Header from "./components/Header";
-import TabContent from "./components/TabContent";
+import Tab from './components/Tab';
 import { GithubDataContextProvider } from "./context";
 
 function App() {
   return (
     <GithubDataContextProvider>
       <Header />
-      <TabContent />
+      <Tab />
     </GithubDataContextProvider>
   );
 }
