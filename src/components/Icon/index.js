@@ -1,3 +1,5 @@
+import React from "react";
+
 function Icon({ name, size }) {
   if (name === "loader") {
     return (
