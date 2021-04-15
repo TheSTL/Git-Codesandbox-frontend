@@ -106,9 +106,9 @@ function DeployConfig() {
         .then((data) => {
           setGithubData((prevState) => ({
             ...prevState,
-            commitList: data.filter((commit) => ({
-              key: commit.message,
-              value: commit.sha,
+            commitList: data.map((commitItem) => ({
+              key: commitItem.commit.message,
+              value: commitItem.sha,
             })),
           }));
         })

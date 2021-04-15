@@ -54,7 +54,7 @@ function SearchInput({ name, placeholder, value, onChange, list }) {
         {isFocusd &&
           suggestions.map((item) => (
             <li key={item.value} data-value={item.value}>
-              {item.value}
+              {item.key}
             </li>
           ))}
       </ul>
