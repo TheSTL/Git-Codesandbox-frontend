@@ -24,11 +24,12 @@
   li {
     margin-bottom: 8px;
     padding: 0 4px;
+    line-height: 24px;
     &:first-child {
       margin-top: 8px;
     }
     &:hover {
-      background-color: #0f6bdd;
+      background-color: rgb(36, 36, 36); 
       color: white;
     }
   }
