@@ -10,6 +10,7 @@ export const GithubDataContextProvider = (props) => {
     embedUrl: "https://codesandbox.io/embed/79wri",
     isLoading: false,
     branchList: [],
+    commitList: [],
   });
   return (
     <GithubDataContext.Provider value={{ githubData, setGithubData }}>

@@ -25,11 +25,13 @@ function SearchInput({ name, placeholder, value, onChange, list }) {
 
   const suggestions = useMemo(
     () =>
-      list.filter(
-        (e) =>
-          e.toLowerCase().includes(value.toLowerCase()) &&
-          e.toLowerCase() !== value.toLowerCase()
-      ),
+      (value &&
+        list.filter(
+          (e) =>
+            e.value.toLowerCase().includes(value.toLowerCase()) &&
+            e.value.toLowerCase() !== value.toLowerCase()
+        )) ||
+      [],
     [value, list]
   );
 
@@ -51,8 +53,8 @@ function SearchInput({ name, placeholder, value, onChange, list }) {
       >
         {isFocusd &&
           suggestions.map((item) => (
-            <li key={item} data-value={item}>
-              {item}
+            <li key={item.value} data-value={item.value}>
+              {item.value}
             </li>
           ))}
       </ul>

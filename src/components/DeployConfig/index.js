@@ -1,13 +1,15 @@
-import { useContext, useCallback, useEffect } from "react";
+import { useContext, useCallback, useEffect, useState } from "react";
 import Button from "../Button";
 import Input from "../Input";
 import Label from "../Label";
 import SearchInput from "../SearchInput";
 import { GithubDataContext } from "../../context";
 import { cloneUrl, importToSandbox } from "../../constants/url";
+import { getRepoLoc } from "../../utils";
 import style from "./index.module.scss";
 
 function DeployConfig() {
+  const [errorMessage, setErrorMessage] = useState("");
   const { githubData, setGithubData } = useContext(GithubDataContext);
   const onChange = useCallback(
     (e) => {
@@ -54,21 +56,65 @@ function DeployConfig() {
   }, [setGithubData, githubData.url, githubData.branch, githubData.commitId]);
 
   useEffect(() => {
-    const repoLoc = githubData.url.split("https://github.com/");
-    if (repoLoc[1]) {
-      fetch(`https://api.github.com/repos/${repoLoc[1]}/branches`)
+    setErrorMessage("");
+    const repoLoc = getRepoLoc(githubData.url);
+
+    if (repoLoc) {
+      fetch(`https://api.github.com/repos/${repoLoc}/branches`)
         .then((response) => {
-          if (!response.ok) return;
+          if (!response.ok) {
+            if (response.status === 403) {
+              throw Error("API rate limit exceeded");
+            }
+            throw Error("The URL provided is not valid.");
+          }
           return response.json();
         })
         .then((data) => {
           setGithubData((prevState) => ({
             ...prevState,
-            branchList: data.map((branchData) => branchData.name),
+            branchList: data.map((branchData) => ({
+              key: branchData.name,
+              value: branchData.name,
+            })),
+            branch: "master",
+            commitId: data.filter(
+              (branchData) => branchData.name === "master"
+            )[0].commit.sha,
           }));
-        });
+        })
+        .catch((err) => setErrorMessage(err.message));
     }
   }, [githubData.url, setGithubData]);
+
+  useEffect(() => {
+    const repoLoc = getRepoLoc(githubData.url);
+
+    if (repoLoc && githubData.branch) {
+      fetch(
+        `https://api.github.com/repos/${repoLoc}/commits?sha=${githubData.branch}`
+      )
+        .then((response) => {
+          if (!response.ok) {
+            if (response.status === 403) {
+              throw Error("API rate limit exceeded");
+            }
+            throw Error("The Branch provided is not valid.");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setGithubData((prevState) => ({
+            ...prevState,
+            commitList: data.filter((commit) => ({
+              key: commit.message,
+              value: commit.sha,
+            })),
+          }));
+        })
+        .catch((err) => setErrorMessage(err.message));
+    }
+  }, [githubData.url, githubData.branch, setGithubData]);
 
   return (
     <div className={style.deployConfig}>
@@ -79,8 +125,8 @@ function DeployConfig() {
         value={githubData.url}
         onChange={onChange}
       />
+      <div className={style.errorMessage}>{errorMessage}</div>
       <Label text="Github Repository Branch Name" />
-
       <SearchInput
         name="branch"
         placeholder="Insert Branch Name"
@@ -89,11 +135,12 @@ function DeployConfig() {
         list={githubData.branchList}
       />
       <Label text="GitHub Repository Commit Id" />
-      <Input
+      <SearchInput
         name="commitId"
         placeholder="Insert Commit Id"
         value={githubData.commitId}
         onChange={onChange}
+        list={githubData.commitList}
       />
       <Button
         text="Deploy"
