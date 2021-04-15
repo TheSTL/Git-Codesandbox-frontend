@@ -59,7 +59,7 @@ function DeployConfig() {
     setErrorMessage("");
     const repoLoc = getRepoLoc(githubData.url);
 
-    if (repoLoc) {
+    if (false && repoLoc) {
       fetch(`https://api.github.com/repos/${repoLoc}/branches`)
         .then((response) => {
           if (!response.ok) {
@@ -90,7 +90,7 @@ function DeployConfig() {
   useEffect(() => {
     const repoLoc = getRepoLoc(githubData.url);
 
-    if (repoLoc && githubData.branch) {
+    if (false && repoLoc && githubData.branch) {
       fetch(
         `https://api.github.com/repos/${repoLoc}/commits?sha=${githubData.branch}`
       )

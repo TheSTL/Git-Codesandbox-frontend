@@ -25,13 +25,11 @@ function SearchInput({ name, placeholder, value, onChange, list }) {
 
   const suggestions = useMemo(
     () =>
-      (value &&
-        list.filter(
-          (e) =>
-            e.value.toLowerCase().includes(value.toLowerCase()) &&
-            e.value.toLowerCase() !== value.toLowerCase()
-        )) ||
-      [],
+      list.filter(
+        (e) =>
+          e.value.toLowerCase().includes(value.toLowerCase()) &&
+          e.value.toLowerCase() !== value.toLowerCase()
+      ).slice(0, 5),
     [value, list]
   );
 
